@@ -34,7 +34,6 @@ try:
                     'Fully equipped kitchen','Furnished','Open fire','Terrace','Garden', 'Surface of the land',
                     'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
-
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
         Locality=' '.join(Locality.text.split())
         list_values_columns.append(Locality)
@@ -136,6 +135,15 @@ try:
             Surface_area_of_the_plot_of_land=None
             list_values_columns.append(Surface_area_of_the_plot_of_land)   
 
+        Number_of_facades = soup.find('th', string="Number of frontages")
+        if Number_of_facades:
+            Number_of_facades = Number_of_facades.find_next_sibling('td')
+            Number_of_facades = ' '.join(Number_of_facades.get_text(strip=True).split())
+            list_values_columns.append(Number_of_facades)
+        else:
+            Number_of_facades=None
+            list_values_columns.append(Number_of_facades)
+            
         row_Swimming_pool=soup.find('th', string=re.compile(r'\s*Swimming pool\s*'))
         if row_Swimming_pool:
             Swimming_pool=row_Swimming_pool.find_next_sibling('td')
