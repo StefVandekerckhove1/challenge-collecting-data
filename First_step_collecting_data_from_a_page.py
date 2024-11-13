@@ -35,7 +35,7 @@ try:
                     'Surface area of the plot of land','Number of facades','Swimming pool','State of the building'], None)   
         
         location = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
-        Locality=' '.join(location.get_text().split())
+        Locality=' '.join(location.text.split())
         
         title=soup.select_one('div.classified__header-primary-info h1.classified__title ')
         Title=' '.join(title.get_text().split())
