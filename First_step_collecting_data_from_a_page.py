@@ -34,6 +34,7 @@ try:
                     'Fully equipped kitchen','Furnished','Open fire','Terrace','Garden', 'Surface of the land',
                     'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
+
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
         Locality=' '.join(Locality.text.split())
         list_values_columns.append(Locality)
