@@ -19,7 +19,7 @@ options = Options()
 driver = webdriver.Chrome(service=service, options=options)
 
 try:
-    url_house='https://www.immoweb.be/en/classified/apartment/for-sale/ixelles/1050/20313791'
+    url_house='https://www.immoweb.be/en/classified/apartment/for-sale/anderlecht/1070/20313783'
 
     house=driver.get(url_house)
    
@@ -30,50 +30,78 @@ try:
     def create_data() :
        
         list_values_columns=[]
-        myDict= dict.fromkeys(['Locality','Type of property','Subtype of property','Price','Type of sale','Number of rooms','Living Area',
+        myDict= dict.fromkeys(['Locality','Type of property','Subtype of property','Price','Number of rooms','Living Area',
                     'Fully equipped kitchen','Furnished','Open fire','Terrace','Garden', 'Surface of the land',
-                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building'], None)   
+                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
-        location = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
-        Locality=' '.join(location.get_text().split())
+        Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
+        Locality=' '.join(Locality.text.split())
+        list_values_columns.append(Locality)
         
         title=soup.select_one('div.classified__header-primary-info h1.classified__title ')
         Title=' '.join(title.get_text().split())
         Title=Title.split()[0] 
+        if (Title == 'House' or Title=='Apartment'):
+            list_values_columns.extend([Title, None])
+        else:
+            list_values_columns.extend([None,Title])
+
+
 
         row_price=soup.find('th', string='Price')
         Price=row_price.find_next_sibling('td').text
         Price = Price[:int(len(Price)/2)]     
         Price=int(re.sub(r'[^\d]', '', Price)) 
 
+        list_values_columns.append(Price)
 
         number_of_rooms=soup.select_one('div.text-block div.grid div.text-block__body div.overview__column div.overview__item span.overview__text')
-        Number_of_room=' '.join(number_of_rooms.get_text().split())
-        Number_of_room=Number_of_room[:2]
+        if number_of_rooms:
+            Number_of_room=' '.join(number_of_rooms.get_text().split())
+            Number_of_room=Number_of_room[:2]
+            list_values_columns.append(Number_of_room)
+        else:
+            Number_of_room=None
+            list_values_columns.append(Number_of_room)
+
 
         row_Living_Area = soup.find('th', string="Living room surface")
-        Living_Area=row_Living_Area.find_next_sibling('td')
-        Living_Area=' '.join(Living_Area.get_text(strip=True).split())
-
-
+        if row_Living_Area:
+            Living_Area=row_Living_Area.find_next_sibling('td')
+            Living_Area=' '.join(Living_Area.get_text(strip=True).split())
+            list_values_columns.append(Living_Area)
+        else:
+            Living_Area=None
+            list_values_columns.append(Living_Area)
 
         row_Kitchen_type=soup.find('th', string='Kitchen type')
-        Kitchen_type=row_Kitchen_type.find_next_sibling('td')
-        Kitchen_type=' '.join(Kitchen_type.get_text(strip=True).split())
+        if row_Kitchen_type:
+            Kitchen_type=row_Kitchen_type.find_next_sibling('td')
+            Kitchen_type=' '.join(Kitchen_type.get_text(strip=True).split())
+            list_values_columns.append(Kitchen_type)
+        else:
+            Kitchen_type=None
+            list_values_columns.append(Kitchen_type)
+
 
         row_Furnished= soup.find('th', string="Furnished")
-        Furnished=row_Furnished.find_next_sibling('td')
-        Furnished=' '.join(Furnished.get_text(strip=True).split()) 
+        if row_Furnished:
+            Furnished=row_Furnished.find_next_sibling('td')
+            Furnished=' '.join(Furnished.get_text(strip=True).split()) 
+            list_values_columns.append(Furnished)
+        else:
+            Furnished=None
+            list_values_columns.append(Furnished)
 
-        list_values_columns.extend([Locality, Title, None, Price, None, Number_of_room, Living_Area, Kitchen_type, Furnished])
 
         row_Open_Fire= soup.find('th', string="How many fireplaces?")
         if row_Open_Fire:
             Open_Fire=row_Open_Fire.find_next_sibling('td')
             Open_Fire=' '.join(Open_Fire.get_text(strip=True).split())
-            list_values_columns.append('Yes')
+            list_values_columns.append(Open_Fire)
         else:
-            list_values_columns.append('No')
+            Open_Fire=None
+            list_values_columns.append(None)
 
 
         row_Terrace= soup.find('th', string="Terrace surface")
@@ -82,57 +110,71 @@ try:
             Terrace=' '.join(Terrace.get_text(strip=True).split())
             list_values_columns.append(Terrace)
         else:
-            list_values_columns.append('No')
+            Terrace=None
+            list_values_columns.append(Terrace)
 
         row_Garden= soup.find('th', string="Garden surface")
         if row_Garden:
             Garden=row_Garden.find_next_sibling('td')
             Garden=' '.join(Garden.get_text(strip=True).split())
             list_values_columns.append(Garden)
-        else:
-            Garden = None
-            list_values_columns.append('No')
-        
-        if Garden:
             Surface_of_the_land=Garden
             list_values_columns.append(Surface_of_the_land)
-        else:
-            list_values_columns.append('No')
 
+        else:
+            Garden=None
+            Surface_of_the_land=None
+            list_values_columns.extend([Garden, Surface_of_the_land])
+    
         row_Surface_area_of_the_plot_of_land= soup.find('th', string="Surface of the plot")
         if row_Surface_area_of_the_plot_of_land:
             Surface_area_of_the_plot_of_land=row_Surface_area_of_the_plot_of_land.find_next_sibling('td')
             Surface_area_of_the_plot_of_land=' '.join(Surface_area_of_the_plot_of_land.get_text(strip=True).split())
             list_values_columns.append(Surface_area_of_the_plot_of_land)
         else:
-            list_values_columns.append(None)
+            Surface_area_of_the_plot_of_land=None
+            list_values_columns.append(Surface_area_of_the_plot_of_land)   
 
-        row_Number_of_facades = soup.find('th', string="Number of frontages")
-        if row_Number_of_facades:
-            Number_of_facades = row_Number_of_facades.find_next_sibling('td')
+        Number_of_facades = soup.find('th', string="Number of frontages")
+        if Number_of_facades:
+            Number_of_facades = Number_of_facades.find_next_sibling('td')
             Number_of_facades = ' '.join(Number_of_facades.get_text(strip=True).split())
             list_values_columns.append(Number_of_facades)
         else:
-            list_values_columns.append(None)
-
+            Number_of_facades=None
+            list_values_columns.append(Number_of_facades)
+            
         row_Swimming_pool=soup.find('th', string=re.compile(r'\s*Swimming pool\s*'))
-        Swimming_pool=row_Swimming_pool.find_next_sibling('td')
-        Swimming_pool=' '.join(Swimming_pool.get_text(strip=True).split())
-        
+        if row_Swimming_pool:
+            Swimming_pool=row_Swimming_pool.find_next_sibling('td')
+            Swimming_pool=' '.join(Swimming_pool.get_text(strip=True).split())
+            list_values_columns.append(Swimming_pool)
+        else:
+            Swimming_pool=None
+            list_values_columns.append(Swimming_pool)
+
         row_Bulding_Condition=soup.find('th', string=re.compile(r"\s*Building condition\s*"))
-        State_of_the_building=row_Bulding_Condition.find_next_sibling('td')
-        State_of_the_building=' '.join(State_of_the_building.get_text(strip=True).split())
+        if row_Bulding_Condition:
+            State_of_the_building=row_Bulding_Condition.find_next_sibling('td')
+            State_of_the_building=' '.join(State_of_the_building.get_text(strip=True).split())
+            list_values_columns.append(State_of_the_building)
+        else:
+            State_of_the_building=None
+            list_values_columns.append(State_of_the_building)
         
-        list_values_columns.extend([ Swimming_pool, State_of_the_building])
+        Code_Immoweb=soup.select_one('div.classified__header--immoweb-code' )
+        Code_Immoweb= int(' '.join(Code_Immoweb.text.split())[15::])
+        list_values_columns.append(Code_Immoweb)
         
+       
         for key, value in zip(myDict.keys(), list_values_columns):
-            myDict[key] = value
+             myDict[key] = value
 
         return myDict
+       
    
     print(create_data())
     
 finally:
     
     driver.quit()
-
