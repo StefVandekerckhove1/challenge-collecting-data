@@ -100,9 +100,12 @@ try:
             list_values_columns.append('No')
 
         row_Surface_area_of_the_plot_of_land= soup.find('th', string="Surface of the plot")
-        Surface_area_of_the_plot_of_land=row_Surface_area_of_the_plot_of_land.find_next_sibling('td')
-        Surface_area_of_the_plot_of_land=' '.join(Surface_area_of_the_plot_of_land.get_text(strip=True).split())
-        list_values_columns.append(Surface_area_of_the_plot_of_land)
+        if row_Surface_area_of_the_plot_of_land:
+            Surface_area_of_the_plot_of_land=row_Surface_area_of_the_plot_of_land.find_next_sibling('td')
+            Surface_area_of_the_plot_of_land=' '.join(Surface_area_of_the_plot_of_land.get_text(strip=True).split())
+            list_values_columns.append(Surface_area_of_the_plot_of_land)
+        else:
+            list_values_columns.append(None)
 
         row_Number_of_facades = soup.find('th', string="Number of frontages")
         if row_Number_of_facades:
@@ -132,3 +135,4 @@ try:
 finally:
     
     driver.quit()
+
