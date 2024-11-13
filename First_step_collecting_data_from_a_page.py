@@ -19,7 +19,7 @@ options = Options()
 driver = webdriver.Chrome(service=service, options=options)
 
 try:
-    url_house='https://www.immoweb.be/en/classified/house/for-sale/sprimont/4140/20312392'
+    url_house='https://www.immoweb.be/en/classified/apartment/for-sale/anderlecht/1070/20313783'
 
     house=driver.get(url_house)
    
@@ -32,7 +32,7 @@ try:
         list_values_columns=[]
         myDict= dict.fromkeys(['Locality','Type of property','Subtype of property','Price','Number of rooms','Living Area',
                     'Fully equipped kitchen','Furnished','Open fire','Terrace','Garden', 'Surface of the land',
-                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building'], None)   
+                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
         Locality=' '.join(Locality.text.split())
@@ -153,6 +153,11 @@ try:
             State_of_the_building=None
             list_values_columns.append(State_of_the_building)
         
+        Code_Immoweb=soup.select_one('div.classified__header--immoweb-code' )
+        Code_Immoweb= int(' '.join(Code_Immoweb.text.split())[15::])
+        list_values_columns.append(Code_Immoweb)
+        
+       
         for key, value in zip(myDict.keys(), list_values_columns):
              myDict[key] = value
 
