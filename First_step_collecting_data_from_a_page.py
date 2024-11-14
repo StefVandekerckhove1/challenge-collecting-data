@@ -34,8 +34,11 @@ def create_data(url_house):
                     'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
-        Locality=' '.join(Locality.text.split())
-        list_values_columns.append(Locality)
+        if Locality:
+            Locality=' '.join(Locality.text.split())
+            list_values_columns.append(Locality)
+        else:
+            list_values_columns.append(None)
         
         title=soup.select_one('div.classified__header-primary-info h1.classified__title ')
         Title=' '.join(title.get_text().split())
