@@ -10,7 +10,7 @@ import time
 import re
 import csv
 
-path = r"C:\Users\Hashira\Documents\BeCode\chromedriver-win64/chromedriver.exe"
+path = r"C:\Users\Hashira\BeCode\chromedriver-win64\chromedriver.exe"
 
 service = Service(path)
 options = Options()
@@ -31,31 +31,44 @@ try:
                     'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code Immoweb','Type of Sale'], None)   
         
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
-        Locality=' '.join(Locality.text.split())
-        list_values_columns.append(Locality)
+        if Locality:
+            Locality=' '.join(Locality.text.split())
+            list_values_columns.append(Locality)
+        else:
+            Locality=None
+            list_values_columns.append(Locality)
+        
         
         title=soup.select_one('div.classified__header-primary-info h1.classified__title ')
-        Title=' '.join(title.get_text().split())
-        Title=Title.split()[0] 
-        if (Title == 'House' or Title=='Apartment'):
-            list_values_columns.extend([Title, None])
-        else:
-            list_values_columns.extend([None,Title])
+        if title:
+            Title = ' '.join(title.get_text().split())
+            Title = Title.split()[0]
+            if Title == 'House' or Title == 'Apartment':
+                list_values_columns.extend([Title, None])
+            else:
+                list_values_columns.extend([None, Title])
 
 
 
         row_price=soup.find('th', string='Price')
-        Price=row_price.find_next_sibling('td').text
-        Price = Price[:int(len(Price)/2)]     
-        Price=int(re.sub(r'[^\d]', '', Price)) 
+        if row_price:
+            price_td = row_price.find_next_sibling('td')
+            if price_td:
+                Price = price_td.text
+                Price = Price[:int(len(Price) / 2)]     
+                Price = int(re.sub(r'[^\d]', '', Price)) 
+                list_values_columns.append(Price)
+            else:
+                list_values_columns.append(None)
+        else:
+            list_values_columns.append(None)
 
-        list_values_columns.append(Price)
 
         number_of_rooms=soup.select_one('div.text-block div.grid div.text-block__body div.overview__column div.overview__item span.overview__text')
         if number_of_rooms:
             Number_of_room=' '.join(number_of_rooms.get_text().split())
-            Number_of_room=Number_of_room[:2]
-            list_values_columns.append(int(Number_of_room))
+            if Number_of_room[:2].isdigit():
+                list_values_columns.append(int(Number_of_room[:2]))
         else:
             Number_of_room=None
             list_values_columns.append(Number_of_room)
@@ -162,8 +175,11 @@ try:
             list_values_columns.append(State_of_the_building)
         
         Code_Immoweb=soup.select_one('div.classified__header--immoweb-code' )
-        Code_Immoweb= int(' '.join(Code_Immoweb.text.split())[15::])
-        list_values_columns.append(Code_Immoweb)
+        if Code_Immoweb:
+            Code_Immoweb = int(' '.join(Code_Immoweb.text.split())[15:])
+            list_values_columns.append(Code_Immoweb)
+        else:
+            list_values_columns.append(None)
         
 
         row_Under_Option = soup.find('span', string='Under option')
@@ -197,7 +213,7 @@ try:
         return myDict
        
    
-    csv_filename = "property_urls_1_to_1.csv"
+    csv_filename = "property_urls_1_to_333_apartment.csv"
 
     property_urls = []
 
@@ -207,12 +223,14 @@ try:
         for row in reader:
             property_urls.append(row[0]) 
 
+    print(len(property_urls))
+
     final_data_output = []
     counter=1
     for url in property_urls:
             final_data_output.append(create_data(url))
-            counter+=1
             print(counter)
+            counter+=1
     
     with open('immoweb_data.csv', mode='w', newline='', encoding='utf-8') as file:
         if final_data_output:
