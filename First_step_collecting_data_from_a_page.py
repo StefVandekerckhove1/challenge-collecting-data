@@ -1,3 +1,6 @@
+from multiprocessing import Pool
+import pandas as pd
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -10,29 +13,25 @@ import time
 import re
 
 
+
 path = "C:/Program Files (x86)/Google/chromedriver-win64/chromedriver.exe"
 
+def init_driver():
+    service = Service(path)
+    options = Options()
+    driver = webdriver.Chrome(service=service, options=options)
+    return driver
 
-service = Service(path)
-options = Options()
-
-driver = webdriver.Chrome(service=service, options=options)
-
-try:
-    url_house='https://www.immoweb.be/en/classified/apartment-block/for-sale/wemmel/1780/20316101'
-
-    house=driver.get(url_house)
-   
-
-    html = driver.page_source
-    soup = BeautifulSoup(html, "html.parser")
-
-    def create_data() :
-       
+def create_data(url_house):
+    driver = init_driver()  
+    try:
+        driver.get(url_house)
+        html = driver.page_source
+        soup = BeautifulSoup(html, "html.parser")
         list_values_columns=[]
         myDict= dict.fromkeys(['Locality','Type of property','Subtype of property','Price','Number of rooms','Living Area',
                     'Fully equipped kitchen','Furnished','Open fire','Terrace','Garden', 'Surface of the land',
-                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code Immoweb','Type of Sale'], None)   
+                    'Surface area of the plot of land','Number of facades','Swimming pool','State of the building','Code_Immoweb'], None)   
         
         Locality = soup.select_one('div.classified__information--address span.classified__information--address-row:last-of-type')
         Locality=' '.join(Locality.text.split())
@@ -199,10 +198,23 @@ try:
              myDict[key] = value
 
         return myDict
-       
-   
-    print(create_data())
-    
-finally:
-    
-    driver.quit()
+
+        
+
+    finally:
+        driver.quit()
+
+
+# Import date with pandas
+df= pd.read_csv('property_urls_1_to_111.csv')
+#Create a list of the first 19 links and save it in urls
+urls = df['Property URLs from page 1 to 111'][1:20].tolist()
+
+if __name__ == "__main__":
+    #Initialize a pool of 5 worker processes
+    with Pool(processes=5) as pool: 
+        # Use the pool to apply the create_data function to each URL  
+        results = pool.map(create_data, urls)   
+
+    for result in results:
+        print(result)
