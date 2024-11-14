@@ -205,7 +205,7 @@ def create_data(url_house):
         driver.quit()
 
 
-# Import date with pandas
+# Import data with pandas
 df= pd.read_csv('property_urls_1_to_111.csv')
 #Create a list of the first 19 links and save it in urls
 urls = df['Property URLs from page 1 to 111'][1:20].tolist()
