@@ -169,6 +169,31 @@ try:
         Code_Immoweb= int(' '.join(Code_Immoweb.text.split())[15::])
         list_values_columns.append(Code_Immoweb)
         
+
+        row_Under_Option = soup.find('span', string='Under option')
+        row_Public_Sale = soup.find('span', string='Online sale')
+        row_Tenement_Building = soup.find('th', string=re.compile(r"\s*Tenement building\s*"))
+
+        if row_Under_Option:
+            Under_Option = ' '.join(row_Under_Option.get_text(strip=True).split())
+            if row_Tenement_Building:
+                Tenement_Building = row_Tenement_Building.find_next_sibling('td')
+                Tenement_Building = ' '.join(Tenement_Building.get_text(strip=True).split())
+                list_values_columns.append((Under_Option, Tenement_Building))
+
+        elif row_Public_Sale:
+            Public_Sale = ' '.join(row_Public_Sale.get_text(strip=True).split())
+            if row_Tenement_Building:
+                Tenement_Building = row_Tenement_Building.find_next_sibling('td')
+                Tenement_Building = ' '.join(Tenement_Building.get_text(strip=True).split())
+                list_values_columns.append((Public_Sale, Tenement_Building))
+
+
+        else:
+            if row_Tenement_Building:
+                Tenement_Building = row_Tenement_Building.find_next_sibling('td')
+                Tenement_Building = ' '.join(Tenement_Building.get_text(strip=True).split())
+                list_values_columns.append(Tenement_Building)
        
         for key, value in zip(myDict.keys(), list_values_columns):
              myDict[key] = value
