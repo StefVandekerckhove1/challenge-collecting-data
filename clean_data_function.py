@@ -35,7 +35,7 @@ def clean_data(df):
     df['Type of Sale']=df['Type of Sale'].astype(str).str.strip().str.lower()
     df['Type of Sale'] = df['Type of Sale'].replace({'yes': 'None', 'no': 'None'})
 
-    df=df.drop_duplicates(subset=['Code Immoweb']).head()
+    df=df.drop_duplicates(subset=['Code Immoweb'])
 
     return df
 
