@@ -25,9 +25,9 @@ Imad, Vera, Stef
 
 | Tuesday 12/11              | Wednesday 13/11          | Thursday 14/11         |Friday 15/11    |
 | ---------------------------| -------------------------|------------------------|----------------|
-| Creation of repo           |                          |                        |README
-| 'create_data()' function   | 'create_data()' function |'create_data()' function|
-| 'Immo_get_urls.py'         | 'Immo_get_urls.py'       |'Immo_get_urls.py'      |
+| Creation of repo           | adding number_of_facades to'create_data()' |adding concurrency to 'create_data()' |writing the README
+| 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data
+| 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  |  |
 
 ## 7. Presentation
 ### 7.1 How did we do it?
@@ -45,7 +45,8 @@ Imad, Vera, Stef
 
 Vera:
 - Prepared the function 'create_data(url)' in 'First_step_collecting_data_from_a_page.py' to extract the required information of an estate.
-- Added multiprocessing to the function 'create_data(url)' to shorten the requesttime. 
+- Added multiprocessing to the function 'create_data(url)' to shorten the requesttime.
+- cleaning the data
 
 Imad:
 - Prepared the scripts 'Immo_get_urls.py' which generated 'property_urls_1_to_333_apartment.csv' and 'property_urls_1_to_333_house.csv' containing a list of urls scraped from ImmoWeb.be,
@@ -64,5 +65,5 @@ Stef:
 ### 7.4 How did we solve it?
 
 - We added conditions to the 'create_data()' function for if some information was missing, the information was added as 'None' or 'No'.
-- 
+  
 
