@@ -10,7 +10,7 @@ import time
 import re
 import csv
 
-path = r"C:\Users\Hashira\BeCode\chromedriver-win64\chromedriver.exe"
+path = r"C:\Users\hp\Imad\Utils\chromedriver-win64\chromedriver.exe"
 
 service = Service(path)
 options = Options()
@@ -47,17 +47,19 @@ try:
                 list_values_columns.extend([Title, None])
             else:
                 list_values_columns.extend([None, Title])
-
-
-
-        row_price=soup.find('th', string='Price')
+        
+        row_price = soup.find('th', string='Price')
         if row_price:
             price_td = row_price.find_next_sibling('td')
             if price_td:
-                Price = price_td.text
-                Price = Price[:int(len(Price) / 2)]     
-                Price = int(re.sub(r'[^\d]', '', Price)) 
-                list_values_columns.append(Price)
+                Price = price_td.text.strip()
+                Price = Price[:int(len(Price) / 2)]
+                cleaned_price = re.sub(r'[^\d]', '', Price)
+                if cleaned_price:
+                    Price = int(cleaned_price)
+                    list_values_columns.append(Price)
+                else:
+                    list_values_columns.append(None)
             else:
                 list_values_columns.append(None)
         else:
@@ -214,32 +216,29 @@ try:
        
    
     csv_filename = "property_urls_1_to_333_apartment.csv"
-
     property_urls = []
 
     with open(csv_filename, mode='r', newline='') as file:
         reader = csv.reader(file)
         next(reader)
         for row in reader:
-            property_urls.append(row[0]) 
+            property_urls.append(row[0])
 
-    print(len(property_urls))
-
-    final_data_output = []
-    counter=1
-    for url in property_urls:
-            final_data_output.append(create_data(url))
-            print(counter)
-            counter+=1
-    
-    with open('immoweb_data.csv', mode='w', newline='', encoding='utf-8') as file:
-        if final_data_output:
-
-            fieldnames = final_data_output[0].keys()  
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
+    with open('immoweb_data.csv', mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=['Locality', 'Type of property', 'Subtype of property', 'Price', 'Number of rooms', 'Living Area',
+                                                  'Fully equipped kitchen', 'Furnished', 'Open fire', 'Terrace', 'Garden', 'Surface of the land',
+                                                  'Surface area of the plot of land', 'Number of facades', 'Swimming pool', 'State of the building', 'Code Immoweb', 'Type of Sale'])
+        
+        if file.tell() == 0:
             writer.writeheader()
-            writer.writerows(final_data_output)
-    
+
+        for counter, url in enumerate(property_urls, start=1):
+            print(f"Processing URL {counter}: {url}")
+            try:
+                result = create_data(url)
+                writer.writerow(result)
+            except Exception as e:
+                print(f"Error processing URL {url}: {e}")
+
 finally:
-    
     driver.quit()
