@@ -26,8 +26,8 @@ Imad, Vera, Stef
 | Tuesday 12/11              | Wednesday 13/11          | Thursday 14/11         |Friday 15/11    |
 | ---------------------------| -------------------------|------------------------|----------------|
 | Creation of repo           | adding number_of_facades to'create_data()' |adding concurrency to 'create_data()' |writing the README
-| 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data
-| 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  |  |
+| 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data| testing and improving concurrency 
+| 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  | check included if url link is valid  |
 
 ## 7. Presentation
 ### 7.1 How did we do it?
@@ -53,7 +53,7 @@ Imad:
 - Prepared 'Immo_scraping.py' for scraping the urls retreived from the 'Immo_get_urls.py' file and storing the information in 'immoweb_data.csv'
 
 Stef:
-- Prepared the git repo
+- Prepared the git repo + README
 - Added the number of facades condition to  the 'create_data()' function
 - Tested the 'create_data()' function on different URL links of ImmoWeb
 
@@ -65,5 +65,5 @@ Stef:
 ### 7.4 How did we solve it?
 
 - We added conditions to the 'create_data()' function for if some information was missing, the information was added as 'None' or 'No'.
-  
+- In the 'Immo_get_urls.py' there is a check included for if the url link is not valid.
 
