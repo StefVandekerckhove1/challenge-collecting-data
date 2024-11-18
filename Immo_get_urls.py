@@ -12,7 +12,7 @@ base_url = "https://www.immoweb.be/en/search/house/for-sale?countries=BE&isALife
 property_urls = []
 
 start_page = 1
-end_page = 2
+end_page = 4
 
 for page in range(start_page, end_page):
     url = f"{base_url}{page}"

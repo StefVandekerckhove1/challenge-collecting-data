@@ -10,7 +10,7 @@ import time
 import re
 import csv
 
-path = r"C:\Users\hp\Imad\Utils\chromedriver-win64\chromedriver.exe"
+path = "C:\\Users\\vande\\chromedriver-win64\\chromedriver.exe"
 
 service = Service(path)
 options = Options()
@@ -215,7 +215,7 @@ try:
         return myDict
        
    
-    csv_filename = "property_urls_1_to_333_apartment.csv"
+    csv_filename = "property_urls_1_to_3.csv"
     property_urls = []
 
     with open(csv_filename, mode='r', newline='') as file:
