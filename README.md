@@ -23,11 +23,13 @@ Imad, Vera, Stef
 
 ## 6. Timeline
 
+
 | Tuesday 12/11              | Wednesday 13/11          | Thursday 14/11         |Friday 15/11    |Monday 18/11
 | ---------------------------| -------------------------|------------------------|----------------|--------------
 | Creation of repo           | adding number_of_facades to'create_data()' |adding concurrency to 'create_data()' |writing the README| cleaning data
 | 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data|
 | 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  | check included if url link is valid  | testing and improving concurrency |
+
 
 ## 7. Presentation
 ### 7.1 How did we do it?
