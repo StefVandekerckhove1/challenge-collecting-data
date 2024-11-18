@@ -23,11 +23,13 @@ Imad, Vera, Stef
 
 ## 6. Timeline
 
-| Tuesday 12/11              | Wednesday 13/11          | Thursday 14/11         |Friday 15/11    |
-| ---------------------------| -------------------------|------------------------|----------------|
-| Creation of repo           | adding number_of_facades to'create_data()' |adding concurrency to 'create_data()' |writing the README
-| 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data| testing and improving concurrency 
-| 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  | check included if url link is valid  |
+
+| Tuesday 12/11              | Wednesday 13/11          | Thursday 14/11         |Friday 15/11    |Monday 18/11
+| ---------------------------| -------------------------|------------------------|----------------|--------------
+| Creation of repo           | adding number_of_facades to'create_data()' |adding concurrency to 'create_data()' |writing the README| cleaning data
+| 'create_data()' function   | adding conditions to 'create_data()' |storing the data in columns in a csv|cleaning of data|
+| 'Immo_get_urls.py'         | scraping urls with 'Immo_get_urls.py'  | check included if url link is valid  | testing and improving concurrency |
+
 
 ## 7. Presentation
 ### 7.1 How did we do it?
@@ -51,6 +53,7 @@ Vera:
 Imad:
 - Prepared the scripts 'Immo_get_urls.py' which generated 'property_urls_1_to_333_apartment.csv' and 'property_urls_1_to_333_house.csv' containing a list of urls scraped from ImmoWeb.be,
 - Prepared 'Immo_scraping.py' for scraping the urls retreived from the 'Immo_get_urls.py' file and storing the information in 'immoweb_data.csv'
+- cleaning of data
 
 Stef:
 - Prepared the git repo + README
