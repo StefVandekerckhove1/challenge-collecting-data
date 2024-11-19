@@ -10,7 +10,8 @@ import time
 import re
 import csv
 
-path = r"C:\Users\hp\Imad\Utils\chromedriver-win64\chromedriver.exe"
+#path = r"C:\Users\hp\Imad\Utils\chromedriver-win64\chromedriver.exe"
+path = r"C:\Users\Hashira\BeCode\chromedriver-win64\chromedriver.exe"
 
 service = Service(path)
 options = Options()
@@ -223,6 +224,8 @@ try:
         next(reader)
         for row in reader:
             property_urls.append(row[0])
+    
+    print(len(property_urls))
 
     with open('immoweb_data.csv', mode='a', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=['Locality', 'Type of property', 'Subtype of property', 'Price', 'Number of rooms', 'Living Area',

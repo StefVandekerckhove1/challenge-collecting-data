@@ -4,7 +4,11 @@ import re
 import string
 
 
-df=pd.read_csv("immoweb_data_apartment.csv")
+df=pd.read_csv("immoweb_data_house.csv")
+
+#df = df.iloc[:, :-1]
+
+df = df.dropna(subset=[df.columns[0], df.columns[1]])
 
 empty_cell_type_locality=df['Type of property'].isnull().sum()        #128
 df['Type of property']=df["Type of property"].fillna('Apartment')
@@ -52,8 +56,8 @@ empty_cell_Number_of_facades=df['Number of facades'].isnull().sum()     #2031
 df['Number of facades']=df['Number of facades'].fillna('None')
 
 
-empty_cell_Swimming_pool=df['Swimming pool'].isnull().sum()  
-df['Swimming pool']=df['Swimming pool'].fillna('None')
+#empty_cell_Swimming_pool=df['Swimming pool'].isnull().sum()  
+#df['Swimming pool']=df['Swimming pool'].fillna('None')
 
 empty_cell_=df['State of the building'].isnull().sum()  
 df['State of the building']=df['State of the building'].fillna('None')
@@ -93,4 +97,6 @@ df['Type of Sale'] = df['Type of Sale'].replace({
 
 df=df.drop_duplicates(subset=['Code Immoweb'])
 
-df.to_csv('Cleaned_data_apartment.csv')
+df.reset_index(drop=True, inplace=True)
+
+df.to_csv('Cleaned_data_house.csv')
